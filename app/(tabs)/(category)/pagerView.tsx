@@ -63,11 +63,15 @@ export default function ImageView() {
                 }}
               >
                 <Image
+                  // onLoadStart={() => console.log('load started')}
+                  // onProgress={(e) => console.log('image progress', e)}
+                  // onLoad={(e) => console.log('successfully loads', e)}
                   style={styles.image}
                   source={item.url}
                   placeholder={{ blurhash }}
                   contentFit="contain"
-                  transition={1000}
+                  // transition={100}
+                  autoplay
                 />
               </Zoomable>
             </GestureHandlerRootView>

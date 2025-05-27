@@ -28,7 +28,21 @@ export default function HomeScreen() {
                 <ThemedText style={{ position: 'absolute', bottom: '5%', left: '40%', zIndex: 9999 }} >Images</ThemedText>
             </View>
           </Pressable>
-
+          <Pressable onPress={() => router.navigate('/gifs')}>
+            <View className=' bg-slate-600 rounded-lg items-center justify-center p-2'>
+              <Image
+                style={{ position: 'relative', borderRadius: 5 }}
+                source={{
+                  uri: thumbnail
+                }}
+                className='w-[150px] h-[200px]'
+              />
+              <ThemedText
+                style={{ position: 'absolute', bottom: '5%', left: '40%', zIndex: 9999 }}>
+                  Gifs
+              </ThemedText>
+            </View>
+          </Pressable>
           <View className=' bg-slate-600 rounded-lg items-center justify-center p-2'>
             <Image
               style={{ position: 'relative', borderRadius: 5 }}
@@ -40,19 +54,6 @@ export default function HomeScreen() {
             <ThemedText
               style={{ position: 'absolute', bottom: '5%', left: '40%', zIndex: 9999 }}>
                 Videos
-            </ThemedText>
-          </View>
-          <View className=' bg-slate-600 rounded-lg items-center justify-center p-2'>
-            <Image
-              style={{ position: 'relative', borderRadius: 5 }}
-              source={{
-                uri: thumbnail
-              }}
-              className='w-[150px] h-[200px]'
-            />
-            <ThemedText
-              style={{ position: 'absolute', bottom: '5%', left: '40%', zIndex: 9999 }}>
-                Gifs
             </ThemedText>
           </View>
           <View className=' bg-slate-600 rounded-lg items-center justify-center p-2'>
