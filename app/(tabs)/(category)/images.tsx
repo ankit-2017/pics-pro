@@ -5,6 +5,7 @@ import {
 } from 'react-native'
 import { Link, useRouter } from 'expo-router'
 import { models } from '@/constants/models'
+import { SafeAreaView } from "react-native-safe-area-context";
 
 type resultProps = {
   url: string | undefined;
@@ -76,7 +77,10 @@ export default function ShowImages () {
   return (
     <View style={{ flex: 1, padding: 10, backgroundColor: '#3f4075' }}>
       {isLoading ? (
-        <ActivityIndicator />
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: 'white', fontSize: 18 }}>Loading Images...</Text>
+          <ActivityIndicator />
+        </View>
       ) : (
         <FlatList
           data={data}

@@ -7,6 +7,7 @@ import {
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import { models } from '@/constants/models'
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ShowGifs () {
   const router = useRouter()
@@ -26,12 +27,14 @@ export default function ShowGifs () {
       try {
         const response = await fetch(`${baseUrl}/api/v1/get-gifs?param=${string}`);
         const json = await response.json();
-        setData(json.gifs?.slice(0,20));
         if (json.gifs?.length === 0){
           createThreeButtonAlert(getRandomInt(models.length))
+          return;
         }
+        setData(json?.gifs || []);
         } catch (error) {
           console.error(error);
+          createThreeButtonAlert(getRandomInt(models.length))
         } finally {
           setLoading(false);
           setRefreshing(false);
@@ -47,20 +50,20 @@ export default function ShowGifs () {
     getImages(models[pageNum]);
   }, []);
 
-  const showGifsInView = (item) => {
-    router.push(`/pagerView?images=${JSON.stringify([item])}`)
+  const showGifsInView = (items) => {
+    router.push(`/galleryView?images=${JSON.stringify(items)}`)
   }
 
   const loadGifs = (data) => {
     if (data && data.length > 0) {
       return data.map ((item, index) => (
         <View key={index} style={styles.container}>
-          <Pressable onPress={() => showGifsInView(item)}>
+          <Pressable onPress={() => showGifsInView(data)}>
             <Image
               style={styles.image}
               source={item.url}
               contentFit="cover"
-              autoplay
+              autoplay={false}
             />
           </Pressable>
         </View>
@@ -76,17 +79,19 @@ export default function ShowGifs () {
   }, []);
 
   return (
-    <ScrollView
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      <View style={{ flex: 1, paddingVertical: 10, backgroundColor: '#3f4075' }}>
-        {isLoading ? (
-          <ActivityIndicator />
-        ) : loadGifs(data)}
-      </View>
-    </ScrollView>
+      <ScrollView
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <View style={{ flex: 1, paddingVertical: 10, backgroundColor: '#3f4075' }}>
+          {isLoading ? (
+            <View>
+              <ActivityIndicator />
+            </View>
+          ) : loadGifs(data)}
+        </View>
+      </ScrollView>
   );
 }
 
@@ -99,6 +104,12 @@ const styles = StyleSheet.create({
   image: {
     height: 400,
     width: '100%',
-    backgroundColor: '#0553',
+    backgroundColor: 'gray',
   },
+  spinner: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#3f4075'
+  }
 })

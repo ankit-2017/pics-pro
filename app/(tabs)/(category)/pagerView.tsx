@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { Image } from 'expo-image'
 import PagerView from 'react-native-pager-view';
 
+
 const blurhash =
   '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
 
@@ -63,14 +64,10 @@ export default function ImageView() {
                 }}
               >
                 <Image
-                  // onLoadStart={() => console.log('load started')}
-                  // onProgress={(e) => console.log('image progress', e)}
-                  // onLoad={(e) => console.log('successfully loads', e)}
                   style={styles.image}
                   source={item.url}
                   placeholder={{ blurhash }}
                   contentFit="contain"
-                  // transition={100}
                   autoplay
                 />
               </Zoomable>
