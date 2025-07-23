@@ -1,35 +1,41 @@
 import React, { useState } from 'react';
-import { router, useLocalSearchParams } from 'expo-router';
-import { View, StyleSheet, StatusBar } from 'react-native';
+import { useLocalSearchParams } from 'expo-router';
+import { View, StyleSheet } from 'react-native';
 import PagerView from 'react-native-pager-view';
+import { Image } from 'expo-image';
+
+const blurhash =
+  '|rF?hV%2WCj[ayj[a|j[az_NaeWBj@ayfRayfQfQM{M|azj[azf6fQfQfQIpWXofj[ayj[j[fQayWCoeoeaya}j[ayfQa{oLj?j[WVj[ayayj[fQoff7azayj[ayj[j[ayofayayayj[fQj[ayayj[ayfjj[j[ayjuayj[';
+
 
 const GalleryView = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  
   const { id, images } = useLocalSearchParams()
   const modalImages = images && JSON.parse(images)
-  const handlePageChange = (e) => {
-    setCurrentIndex(e.nativeEvent.position);
-  };
 
   return (
     <View style={styles.container}>
-      <PagerView
-        style={styles.pagerView}
-        initialPage={0}
-        onPageSelected={handlePageChange}
-        orientation={'vertical'}
-      >
-        {modalImages.length > 0 && modalImages.map((image, index) => (
-          <View key={index} style={styles.page}>
-            <Image
-              source={{ uri: image.url }}
-              style={styles.image}
-              resizeMode="contain"
-            />
-          </View>
-        ))}
-      </PagerView>
+    {
+      modalImages && (
+          <PagerView
+            style={styles.pagerView}
+            initialPage={0}
+            orientation={'vertical'}
+          >
+            {modalImages?.length > 0 && modalImages.map((image, index) => (
+              <View key={image.id || index} style={styles.page}>
+                <Image
+                  source={image.url}
+                  style={styles.image}
+                  placeholder={{ blurhash }}
+                  contentFit='contain'
+                  autoplay
+                  allowDownscaling
+                />
+              </View>
+            ))}
+          </PagerView>
+      )
+    }
     </View>
   );
 };

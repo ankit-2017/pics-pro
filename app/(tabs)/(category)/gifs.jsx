@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, cache } from "react";
 import {
   View, StyleSheet, Alert, RefreshControl,
   Pressable, ActivityIndicator,
@@ -31,7 +31,14 @@ export default function ShowGifs () {
           createThreeButtonAlert(getRandomInt(models.length))
           return;
         }
-        setData(json?.gifs || []);
+        const imagesUrls = json?.gifs.slice(0,20).map(item => item.url);
+        // Prefetch each image URL with cache policy
+        await Promise.all(
+          imagesUrls.map(url =>
+            Image.prefetch(url, { cachePolicy: "disk" })
+          )
+        );
+        setData(json?.gifs.slice(0,20));
         } catch (error) {
           console.error(error);
           createThreeButtonAlert(getRandomInt(models.length))
@@ -51,19 +58,21 @@ export default function ShowGifs () {
   }, []);
 
   const showGifsInView = (items) => {
-    router.push(`/galleryView?images=${JSON.stringify(items)}`)
+    const parsedData = JSON.stringify(items)
+    router.push(`/galleryView?images=${parsedData}`)
   }
 
   const loadGifs = (data) => {
     if (data && data.length > 0) {
       return data.map ((item, index) => (
-        <View key={index} style={styles.container}>
+        <View key={index} className="p-2 rounded-lg items-center justify-center">
           <Pressable onPress={() => showGifsInView(data)}>
             <Image
               style={styles.image}
               source={item.url}
               contentFit="cover"
               autoplay={false}
+              cachePolicy={'disk'}
             />
           </Pressable>
         </View>
@@ -83,8 +92,9 @@ export default function ShowGifs () {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        style={{ flex: 1, backgroundColor: '#3f4075' }}
       >
-        <View style={{ flex: 1, paddingVertical: 10, backgroundColor: '#3f4075' }}>
+        <View className="flex flex-row flex-wrap justify-around gap-1">
           {isLoading ? (
             <View>
               <ActivityIndicator />
@@ -99,12 +109,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     marginHorizontal: 0,
-    marginVertical: 5
+    marginVertical: 5,
   },
   image: {
-    height: 400,
-    width: '100%',
-    backgroundColor: 'gray',
+    height: 250,
+    width: 170,
+    borderRadius: 5,
+    backgroundColor: 'gray'
   },
   spinner: {
     flex: 1,
