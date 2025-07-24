@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, cache } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View, StyleSheet, Alert, RefreshControl,
   Pressable, ActivityIndicator,
@@ -7,7 +7,7 @@ import {
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import { models } from '@/constants/models'
-import { SafeAreaView } from "react-native-safe-area-context";
+// import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ShowGifs () {
   const router = useRouter()
@@ -33,11 +33,11 @@ export default function ShowGifs () {
         }
         const imagesUrls = json?.gifs.slice(0,20).map(item => item.url);
         // Prefetch each image URL with cache policy
-        await Promise.all(
-          imagesUrls.map(url =>
-            Image.prefetch(url, { cachePolicy: "disk" })
-          )
-        );
+        // await Promise.all(
+        //   imagesUrls.map(url =>
+        //     Image.prefetch(url, { cachePolicy: "disk" })
+        //   )
+        // );
         setData(json?.gifs.slice(0,20));
         } catch (error) {
           console.error(error);
@@ -72,7 +72,6 @@ export default function ShowGifs () {
               source={item.url}
               contentFit="cover"
               autoplay={false}
-              cachePolicy={'disk'}
             />
           </Pressable>
         </View>

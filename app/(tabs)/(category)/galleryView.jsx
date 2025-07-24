@@ -29,7 +29,6 @@ const GalleryView = () => {
                   placeholder={{ blurhash }}
                   contentFit='contain'
                   autoplay
-                  allowDownscaling
                 />
               </View>
             ))}
