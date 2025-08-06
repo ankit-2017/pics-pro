@@ -7,7 +7,8 @@ import {
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import { models } from '@/constants/models'
-// import { SafeAreaView } from "react-native-safe-area-context";
+import { SafeAreaView } from "react-native-safe-area-context";
+import UserButton from "@/components/ui/Button";
 
 export default function ShowGifs () {
   const router = useRouter()
@@ -31,14 +32,8 @@ export default function ShowGifs () {
           createThreeButtonAlert(getRandomInt(models.length))
           return;
         }
-        const imagesUrls = json?.gifs.slice(0,20).map(item => item.url);
-        // Prefetch each image URL with cache policy
-        // await Promise.all(
-        //   imagesUrls.map(url =>
-        //     Image.prefetch(url, { cachePolicy: "disk" })
-        //   )
-        // );
-        setData(json?.gifs.slice(0,20));
+        setData(json?.gifs);
+        
         } catch (error) {
           console.error(error);
           createThreeButtonAlert(getRandomInt(models.length))
@@ -80,6 +75,22 @@ export default function ShowGifs () {
     return null;
   }
 
+  const loadGifsInPagerView = (data) => {
+    if (data && data.length > 0) {
+      return (
+        <View style={{ flex: 1, width: '100%', paddingInline: 10 }}>
+          <UserButton
+            onPress={() => showGifsInView(data)}
+            title="Show Gifs"
+            type="linear"
+            backgroundColor={["#f73946", "#e0468e"]}
+            customStyles={{ marginTop: 16 }}
+          />
+        </View>
+      )
+    }
+  }
+
   const onRefresh = useCallback(() => {
     setRefreshing(true);
     const pageNum1 = getRandomInt(models?.length)
@@ -87,20 +98,21 @@ export default function ShowGifs () {
   }, []);
 
   return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#3f4075' }}>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        style={{ flex: 1, backgroundColor: '#3f4075' }}
       >
         <View className="flex flex-row flex-wrap justify-around gap-1">
           {isLoading ? (
             <View>
               <ActivityIndicator />
             </View>
-          ) : loadGifs(data)}
+          ) : loadGifsInPagerView(data)}
         </View>
       </ScrollView>
+    </SafeAreaView>
   );
 }
 

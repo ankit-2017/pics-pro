@@ -3,9 +3,10 @@ import { useRouter } from "expo-router";
 import { Formik } from "formik";
 import { View, Text, StyleSheet, Alert, Image, Pressable } from "react-native";
 import { LoginSchema } from "@/utility/formSchema";
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 
-import UserButton from "../../components/ui/Button";
-import TextInput from "../../components/ui/TextInput";
+import UserButton from "../ui/Button";
+import TextInput from "../ui/TextInput";
 
 export default function Login() {
   const router = useRouter();
@@ -16,11 +17,11 @@ export default function Login() {
 
   return (
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ password: "" }}
         validationSchema={LoginSchema}
         onSubmit={(values) => {
-          console.log(values);
-          onLogin();
+          // console.log(values);
+          onLogin(); 
         }}
       >
         {({
@@ -32,50 +33,28 @@ export default function Login() {
           values,
         }) => (
           <View>
-            <View style={{ alignItems: "center", justifyContent: "center" }}>
-              <Image
-                source={require('@/assets/images/splash-icon.png')}
-                style={Styles.image}
-              />
+            <View style={{ alignItems: "center", justifyContent: "center", marginBottom: 40 }}>
+              <FontAwesome5 name="user-lock" size={128} color="white" />
             </View>
-            <TextInput
-              value={values.email}
-              setValue={handleChange("email")}
-              onBlur={handleBlur("email")}
-              placeholder="Enter Email ID"
-              inputLabel="Email ID"
-              validationText={
-                (errors.email && touched.email) ? errors.email : false
-              }
-              customStyles={Styles.textInputStyles}
-            />
             <TextInput
               value={values.password}
               setValue={handleChange("password")}
-              onBlur={handleBlur("email")}
+              onBlur={handleBlur("password")}
               placeholder="Enter Password"
-              inputLabel="Password"
               validationText={
                 (errors.password && touched.password) ? errors.password : false
               }
               type="password"
+              backgroundColor="transparent"
               customStyles={Styles.textInputStyles}
             />
             <UserButton
-              onPress={onLogin}
+              onPress={handleSubmit}
               title="Login"
               type="linear"
               backgroundColor={["#f73946", "#e0468e"]}
               customStyles={{ marginTop: 16 }}
             />
-            <View style={Styles.signupWrapper}>
-              <Text style={{ fontSize: 14, color: "#fff" }}>
-                Don&apos;t have account!{" "}
-              </Text>
-              <Pressable>
-                <Text style={Styles.signupText}>Sign up</Text>
-              </Pressable>
-            </View>
           </View>
         )}
       </Formik>
@@ -98,6 +77,7 @@ const Styles = StyleSheet.create({
   image: {
     width: 170,
     height: 160,
+    marginBottom: 20,
   },
   signupWrapper: {
     marginTop: 8,

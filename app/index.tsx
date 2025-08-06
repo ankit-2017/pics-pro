@@ -10,7 +10,7 @@ export default function Index() {
   return (
     <SafeAreaProvider>
       <LinearGradient
-        colors={["#a65cf7", "#2f31d4"]}
+        colors={["#2f31d4", "#0f304d"]}
         style={{ flex: 1 }}
       >
         <StatusBar style="auto" />
@@ -24,7 +24,7 @@ export default function Index() {
 
 const Styles = StyleSheet.create({
   mainContainer: {
-    paddingTop: "30%",
+    paddingTop: "50%",
     paddingRight: 20,
     paddingLeft: 20,
     fontFamily: "Signika"
